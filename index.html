@@ -37,16 +37,6 @@
     }
     .free { background: #123d2a; }
     .occ { background: #4a1515; }
-    a.button {
-      display: block;
-      padding: 12px;
-      margin-top: 8px;
-      border-radius: 10px;
-      background: #2a2c31;
-      color: white;
-      text-decoration: none;
-      font-weight: 600;
-    }
     .meta {
       margin-top: 12px;
       font-size: 13px;
@@ -59,46 +49,38 @@
   <div class="card">
     <h1>Basement Gym</h1>
 
-    <div id="statusBox" class="status free">FREE</div>
-
-    <a class="button"
-   href="https://script.googleusercontent.com/macros/echo?user_content_key=AehSKLg8Xb9y-DT2BKzsRLBhfhFoM9WnIXQf8LRdsaGCGch_i-o6lWQ97yI88DSg5KJy1mCQFN-j9f3rZLL2RT9xKM9QzxZStne&lib=AKfycbz10oD-v1ffJauMzfjUQuzBndZHph4cXZQLROC2git9Yy1mp7n1drfHdEtL6A3QXY_3-w&status=occupied">
-  Set OCCUPIED
-</a>
-
-
-  <a class="button"
-   href="https://script.googleusercontent.com/macros/echo?user_content_key=AehSKLg8Xb9y-DT2BKzsRLBhfhFoM9WnIXQf8LRdsaGCGch_i-o6lWQ97yI88DSg5KJy1mCQFN-j9f3rZLL2RT9xKM9QzxZStne&lib=AKfycbz10oD-v1ffJauMzfjUQuzBndZHph4cXZQLROC2git9Yy1mp7n1drfHdEtL6A3QXY_3-w&status=free">
-  Set FREE
-</a>
-
+    <div id="statusBox" class="status">Loading…</div>
 
     <div class="meta">
-      Last update refreshes automatically
+      Last update: <span id="lastUpdate">—</span>
     </div>
   </div>
 
   <script>
-   const API =
-  "https://script.google.com/macros/s/AKfycbz10oD-v1ffJauMzfjUQuzBndZHph4cXZQLROC2git9Yy1mp7n1drfHdEtL6A3QXY_3-w/exec";
-
+    const API =
+      "https://script.google.com/macros/s/AKfycbz10oD-v1ffJauMzfjUQuzBndZHph4cXZQLROC2git9Yy1mp7n1drfHdEtL6A3QXY_3-w/exec";
 
     async function load() {
-      const res = await fetch(API);
+      const res = await fetch(API, { cache: "no-store" });
       const data = await res.json();
 
       const box = document.getElementById("statusBox");
-      box.textContent = data.status === "occupied" ? "OCCUPIED" : "FREE";
-      box.className = "status " + (data.status === "occupied" ? "occ" : "free");
+      const status = data.status;
+
+      box.textContent = status === "occupied" ? "OCCUPIED" : "FREE";
+      box.className = "status " + (status === "occupied" ? "occ" : "free");
+
+      document.getElementById("lastUpdate").textContent =
+        data.lastUpdated
+          ? new Date(data.lastUpdated).toLocaleString()
+          : "Never";
     }
 
     load();
-    setInterval(load, 3000);
+    setInterval(load, 5000);
   </script>
 </body>
 </html>
-
-
 
 
 
