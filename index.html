@@ -25,62 +25,8 @@
       box-shadow: 0 10px 30px rgba(0,0,0,.4);
     }
     h1 {
-      margin-top: 0;
-      font-size: 20px;
-    }
-    .status {
-      font-size: 48px;
-      font-weight: 900;
-      padding: 16px;
-      border-radius: 12px;
-      margin: 16px 0;
-    }
-    .free { background: #123d2a; }
-    .occ { background: #4a1515; }
-    .meta {
-      margin-top: 12px;
-      font-size: 13px;
-      opacity: 0.8;
-    }
-  </style>
-</head>
+      margin
 
-<body>
-  <div class="card">
-    <h1>Basement Gym</h1>
-
-    <div id="statusBox" class="status">Loading…</div>
-
-    <div class="meta">
-      Last update: <span id="lastUpdate">—</span>
-    </div>
-  </div>
-
-  <script>
-    const API =
-      "https://script.google.com/macros/s/AKfycbz10oD-v1ffJauMzfjUQuzBndZHph4cXZQLROC2git9Yy1mp7n1drfHdEtL6A3QXY_3-w/exec";
-
-    async function load() {
-      const res = await fetch(API, { cache: "no-store" });
-      const data = await res.json();
-
-      const box = document.getElementById("statusBox");
-      const status = data.status;
-
-      box.textContent = status === "occupied" ? "OCCUPIED" : "FREE";
-      box.className = "status " + (status === "occupied" ? "occ" : "free");
-
-      document.getElementById("lastUpdate").textContent =
-        data.lastUpdated
-          ? new Date(data.lastUpdated).toLocaleString()
-          : "Never";
-    }
-
-    load();
-    setInterval(load, 5000);
-  </script>
-</body>
-</html>
 
 
 
