@@ -69,14 +69,47 @@
     </div>
   </div>
 
-  <script>
-    function setStatus(status) {
-      localStorage.setItem("gym_status", status);
-      localStorage.setItem("gym_time", new Date().toLocaleString());
-      render();
-    }
+ <script>
+  const API_URL = https://script.google.com/macros/s/AKfycbzrp0GoIRSTKm9eHTs1uEKqUI6YGkqYG7n-H5wbVwAcqOg_17EIGZyFpy89QQdhza6gSQ/exec;
 
-    function render() {
+  function fmtTime(iso) {
+    if (!iso) return "Never";
+    return new Date(iso).toLocaleString();
+  }
+
+  async function getStatus() {
+    const res = await fetch(API_URL, { cache: "no-store" });
+    return await res.json();
+  }
+
+  async function setStatus(status) {
+    await fetch(API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ status })
+    });
+    await render();
+  }
+
+  async function render() {
+    const data = await getStatus();
+    const status = (data.status || "free").toLowerCase();
+
+    const box = document.getElementById("statusBox");
+    box.textContent = status === "occupied" ? "OCCUPIED" : "FREE";
+    box.className = "status " + (status === "occupied" ? "occ" : "free");
+
+    document.getElementById("lastUpdate").textContent = fmtTime(data.lastUpdated);
+  }
+
+  document.getElementById("btnOcc").onclick = () => setStatus("occupied");
+  document.getElementById("btnFree").onclick = () => setStatus("free");
+  document.getElementById("btnRefresh").onclick = render;
+
+  render();
+  setInterval(render, 5000);
+</script>
+
       const status = localStorage.getItem("gym_status") || "free";
       const time = localStorage.getItem("gym_time") || "Never";
       const box = document.getElementById("statusBox");
@@ -90,3 +123,4 @@
   </script>
 </body>
 </html>
+
