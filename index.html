@@ -1,1 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#111111" />
+  <title>Gym Status</title>
 
+  <style>
+    :root { color-scheme: light dark; }
+    body {
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      margin: 0; padding: 24px;
+      display: grid; place-items: center;
+      min-height: 100vh;
+      background: #0f0f10;
+      color: #fff;
+    }
+    .card {
+      width: min(520px, 92vw);
+      background: #17181b;
+      border: 1px solid #2a2c31;
+      border-radius: 18px;
+      padding: 22px;
+      box-shadow: 0 10px 30px rgba(0,0,0,.35);
+    }
+    h1 { margin: 0 0 12px; font-size: 22px; font-weight: 700; }
+    .status {
+      margin-top: 10px;
+      font-size: 54px;
+      font-weight: 900;
+      padding: 18px 16px;
+      border-radius: 16px;
+      text-align: center;
+      border: 1px solid #2a2c31;
+    }
+    .free { background: rgba(0,180,90,.18); }
+    .occ { background: rgba(255,70,70,.18); }
+    .row { display:flex; gap:10px; margin-top:14px; flex-wrap: wrap; }
+    button {
+      flex: 1;
+      min-width: 140px;
+      border: 1px solid #2a2c31;
+      background: #22242a;
+      color: #fff;
+      padding: 12px 14px;
+      border-radius: 14px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .meta { margin-top: 14px; opacity: .8; font-size: 14px; }
+  </style>
+</head>
+
+<body>
+  <div class="card">
+    <h1>Basement Gym</h1>
+
+    <div id="statusBox" class="status free">FREE</div>
+
+    <div class="row">
+      <button onclick="setStatus('occupied')">Set OCCUPIED</button>
+      <button onclick="setStatus('free')">Set FREE</button>
+    </div>
+
+    <div class="meta">
+      Last update: <strong id="lastUpdate">Never</strong>
+    </div>
+  </div>
+
+  <script>
+    function setStatus(status) {
+      localStorage.setItem("gym_status", status);
+      localStorage.setItem("gym_time", new Date().toLocaleString());
+      render();
+    }
+
+    function render() {
+      const status = localStorage.getItem("gym_status") || "free";
+      const time = localStorage.getItem("gym_time") || "Never";
+      const box = document.getElementById("statusBox");
+
+      box.textContent = status === "occupied" ? "OCCUPIED" : "FREE";
+      box.className = "status " + (status === "occupied" ? "occ" : "free");
+      document.getElementById("lastUpdate").textContent = time;
+    }
+
+    render();
+  </script>
+</body>
+</html>
