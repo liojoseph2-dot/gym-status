@@ -8,7 +8,6 @@
   <style>
     body {
       margin: 0;
-      padding: 0;
       min-height: 100vh;
       display: flex;
       align-items: center;
@@ -36,23 +35,17 @@
       border-radius: 12px;
       margin: 16px 0;
     }
-    .free {
-      background: #123d2a;
-    }
-    .occ {
-      background: #4a1515;
-    }
-    button {
-      width: 100%;
+    .free { background: #123d2a; }
+    .occ { background: #4a1515; }
+    a.button {
+      display: block;
       padding: 12px;
       margin-top: 8px;
-      font-size: 16px;
       border-radius: 10px;
-      border: none;
       background: #2a2c31;
       color: white;
+      text-decoration: none;
       font-weight: 600;
-      cursor: pointer;
     }
     .meta {
       margin-top: 12px;
@@ -68,22 +61,24 @@
 
     <div id="statusBox" class="status free">FREE</div>
 
-    <button onclick="setStatus('occupied')">Set OCCUPIED</button>
-    <button onclick="setStatus('free')">Set FREE</button>
+    <a class="button"
+       href="https://script.google.com/macros/s/AKfycbzrp0GoIRSTKm9eHTs1uEKqUI6YGkqYG7n-H5wbVwAcqOg_17EIGZyFpy89QQdhza6gSQ/exec?status=occupied">
+      Set OCCUPIED
+    </a>
+
+    <a class="button"
+       href="https://script.google.com/macros/s/AKfycbzrp0GoIRSTKm9eHTs1uEKqUI6YGkqYG7n-H5wbVwAcqOg_17EIGZyFpy89QQdhza6gSQ/exec?status=free">
+      Set FREE
+    </a>
 
     <div class="meta">
-      Last update: <span id="lastUpdate">Loading…</span>
+      Last update refreshes automatically
     </div>
   </div>
 
   <script>
     const API =
       "https://script.google.com/macros/s/AKfycbzrp0GoIRSTKm9eHTs1uEKqUI6YGkqYG7n-H5wbVwAcqOg_17EIGZyFpy89QQdhza6gSQ/exec";
-
-    async function setStatus(status) {
-      await fetch(API + "?status=" + status);
-      load();
-    }
 
     async function load() {
       const res = await fetch(API);
@@ -92,16 +87,15 @@
       const box = document.getElementById("statusBox");
       box.textContent = data.status === "occupied" ? "OCCUPIED" : "FREE";
       box.className = "status " + (data.status === "occupied" ? "occ" : "free");
-
-      document.getElementById("lastUpdate").textContent =
-        data.lastUpdated ? new Date(data.lastUpdated).toLocaleString() : "Never";
     }
 
     load();
-    setInterval(load, 5000);
+    setInterval(load, 3000);
   </script>
 </body>
 </html>
+
+
 
 
 
