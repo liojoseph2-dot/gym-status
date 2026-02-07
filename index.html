@@ -96,12 +96,11 @@
     }
 
     async function setStatus(status) {
-      await fetch(API_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ status })
-      });
-      await render();
+  const url = API_URL + "?status=" + encodeURIComponent(status);
+  await fetch(url, { cache: "no-store" });
+  await render();
+}
+
     }
 
     async function render() {
@@ -123,5 +122,6 @@
   </script>
 </body>
 </html>
+
 
 
